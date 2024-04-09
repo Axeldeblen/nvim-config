@@ -12,7 +12,6 @@ return {
         'svelte',
         'rust_analyzer',
         'lua_ls',
-        'gopls'
       },
       handlers = {
         function(server_name)
