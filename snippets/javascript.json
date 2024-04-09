@@ -1,0 +1,26 @@
+{
+  "import": {
+    "prefix": "imp",
+    "body": ["import { $2 } from \"$1\""]
+  },
+
+  "JSON Stringify Console": {
+    "prefix": "clj",
+    "body": ["console.log(JSON.stringify({ $1 }, null, 2))"]
+  },
+
+  "Test Describe": {
+    "prefix": "desc",
+    "body": ["describe(\"$1\", () => {\n  it(\"$2\", async () => { });\n});"]
+  },
+
+  "Test it": {
+    "prefix": "it",
+    "body": ["it(\"$1\", async () => { });"]
+  },
+
+  "For Loop": {
+    "prefix": "for",
+    "body": ["for (let i; i <= 100; i += 1) { }"]
+  }
+}
