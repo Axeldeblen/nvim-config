@@ -30,7 +30,6 @@ return {
         'regex',
         'scss',
         'svelte',
-        'tailwind-language-server',
         'tsx',
         'terraform',
         'typescript',
