@@ -28,3 +28,4 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.multi_cursor_exit_from_visual_mode = true
 vim.g.multi_cursor_exit_from_insert_mode = true
 
+vim.g.airline_theme = 'deus'
