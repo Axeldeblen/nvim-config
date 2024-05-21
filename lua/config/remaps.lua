@@ -13,7 +13,7 @@ keymap({ 'n', 'v' }, '<C-h>', '<cmd>tabp<CR>', default_opts)
 keymap('n', '<leader>rr', '<cmd>lua vim.lsp.buf.rename()<CR>', default_opts)
 
 -- Visual selection to clipboard
-keymap('v', '<leader>C', '"*y', default_oprs)
+keymap('v', '<leader>C', '"*y', default_opts)
 
 -- Keep cursor in middle
 keymap('n', '<C-d>', '<C-d>zz', default_opts)
