@@ -48,6 +48,7 @@ keymap("n", "dio", "d]}", default_opts)
 
 -- New escape
 keymap("i", "jj", "<Esc>", default_opts)
+keymap("i", "Jj", "<Esc>", default_opts)
 
 -- write
 keymap("n", "<leader>w", "<cmd>w!<CR>", default_opts)
