@@ -55,3 +55,6 @@ keymap("n", "<leader>w", "<cmd>w!<CR>", default_opts)
 
 --import completion
 keymap("n", "<leader>a", "<cmd>lua vim.lsp.buf.code_action()<CR>", default_opts)
+
+-- Copy current relative filepath to clipboard
+keymap('n', '<leader>Y', function() vim.fn.setreg('+', vim.fn.expand('%')) end, default_opts)
