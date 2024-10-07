@@ -11,6 +11,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+
 require('config')
 require('config.remaps')
 require('config.surround')
@@ -18,3 +19,9 @@ require('lazy').setup('plugins', {
   change_detection = { notify = false }
 })
 require('kanagawa').load('wave')
+
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    require('telescope.builtin').git_files()
+  end,
+})
