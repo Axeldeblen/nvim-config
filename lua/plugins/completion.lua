@@ -31,7 +31,10 @@ return {
           luasnip.lsp_expand(args.body)
         end
       },
+
       mapping = cmp.mapping.preset.insert({
+        ["<C-Space>"] = cmp.mapping.complete(),
+        ["<C-e>"] = cmp.mapping.close(),
         ["<C-j>"] = cmp.mapping.select_next_item({}),
         ["<C-k>"] = cmp.mapping.select_prev_item({}),
         ['<Tab>'] = cmp.mapping(function(fallback)
