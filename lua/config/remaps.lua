@@ -58,3 +58,8 @@ keymap("n", "<leader>a", "<cmd>lua vim.lsp.buf.code_action()<CR>", default_opts)
 
 -- Copy current relative filepath to clipboard
 keymap('n', '<leader>Y', function() vim.fn.setreg('+', vim.fn.expand('%')) end, default_opts)
+
+-- copy selection to clipboard
+keymap('v', '<leader>y', function() vim.fn.setreg('+', vim.fn.getreg('"')) end, default_opts)
+-- paste from clipboard
+keymap('n', '<leader>p', function() vim.fn.setreg('"', vim.fn.getreg('+')) end, default_opts)
