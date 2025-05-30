@@ -25,3 +25,15 @@ vim.api.nvim_create_autocmd('VimEnter', {
     require('telescope.builtin').git_files()
   end,
 })
+
+vim.api.nvim_create_autocmd('BugWritePost', {
+  pattern = { "*.lua" },
+  callback = function()
+    if string.find(vim.fn.expand('%:p', vi.fn.stdpath('config')), 'nvim') then
+      vim.cmd('source %')
+      vim.notify("Reloaded!", vim.log.levels.INFO, {
+        title = 'Neovim Config',
+      })
+    end
+  end,
+})
