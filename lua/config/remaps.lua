@@ -1,6 +1,7 @@
 local keymap = vim.keymap.set
 local default_opts = { noremap = true, silent = true }
 
+vim.api.nvim_set_option("clipboard", "unnamed") -- Use system clipboard
 -- Basic remaps
 keymap({ 'i', 'v', 'n' }, '<C-c>', '<Esc>', default_opts)
 keymap({ 'n', 'v' }, 'E', '$', default_opts)
@@ -58,8 +59,3 @@ keymap("n", "<leader>a", "<cmd>lua vim.lsp.buf.code_action()<CR>", default_opts)
 
 -- Copy current relative filepath to clipboard
 keymap('n', '<leader>Y', function() vim.fn.setreg('+', vim.fn.expand('%')) end, default_opts)
-
--- copy selection to clipboard
-keymap('v', '<leader>y', function() vim.fn.setreg('+', vim.fn.getreg('"')) end, default_opts)
--- paste from clipboard
-keymap('n', '<leader>p', function() vim.fn.setreg('"', vim.fn.getreg('+')) end, default_opts)
