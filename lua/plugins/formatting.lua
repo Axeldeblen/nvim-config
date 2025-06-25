@@ -1,21 +1,58 @@
 return {
-  'jose-elias-alvarez/null-ls.nvim',
+  "stevearc/conform.nvim",
   dependencies = {
-    'jose-elias-alvarez/typescript.nvim',
+    "pmizio/typescript-tools.nvim",
   },
+  event = { "BufReadPre", "BufNewFile" },
   config = function()
-    local null_ls = require('null-ls')
+    local conform = require("conform")
     local utils = require('utils')
-    local typescript = require('typescript')
+
+    conform.setup({
+      formatters_by_ft = {
+        javascript = { "prettier" },
+        typescript = { "prettier" },
+        javascriptreact = { "prettier" },
+        typescriptreact = { "prettier" },
+        svelte = { "prettier" },
+        css = { "prettier" },
+        html = { "prettier" },
+        json = { "prettier" },
+        yaml = { "prettier" },
+        markdown = { "prettier" },
+        graphql = { "prettier" },
+        vue = { "prettier" },
+        lua = { "stylua" },
+        go = { "goimports", "gofmt" },
+        rust = { "rustfmt" },
+        terraform = { "terraform_fmt" },
+      },
+      format_on_save = function(bufnr)
+        local disable_filetypes = { c = true, cpp = true }
+        return {
+          timeout_ms = 500,
+          lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+        }
+      end,
+    })
 
     local default_format = function()
-      vim.lsp.buf.format({ async = false })
+      conform.format({
+        lsp_fallback = true,
+        async = false,
+        timeout_ms = 1000,
+      })
     end
 
     local typescript_format = function()
       pcall(function()
         default_format()
-        typescript.actions.organizeImports({ sync = true })
+        vim.lsp.buf.code_action({
+          filter = function(action)
+            return action.title == "Organize Imports"
+          end,
+          apply = true,
+        })
       end)
     end
 
@@ -35,66 +72,6 @@ return {
       end
     end, { noremap = true, silent = true })
 
-    vim.api.nvim_create_autocmd('BufWritePre', {
-      pattern = {
-        '*.graphql',
-        '*.go',
-        '*.lua',
-        '*.rs',
-        '*.tf'
-      },
-      callback = default_format
-    })
-
-    vim.api.nvim_create_autocmd('BufWritePre', {
-      pattern = {
-        '*.ts',
-        '*.tsx',
-        --'*.js',
-        '*.cjs',
-        '*.mjs',
-        '*.tsx',
-        '*.svelte',
-      },
-      callback = typescript_format
-    })
-
-    typescript.setup({})
-    null_ls.setup({
-      sources = {
-        -- GO
-        null_ls.builtins.diagnostics.golangci_lint,
-        null_ls.builtins.formatting.gofmt,
-        null_ls.builtins.code_actions.impl,
-
-        -- Lua
-        null_ls.builtins.formatting.stylua,
-
-        -- Terraform
-        null_ls.builtins.formatting.terraform_fmt,
-
-        -- Generic
-        null_ls.builtins.completion.spell,
-
-        -- JS/TS
-        null_ls.builtins.code_actions.eslint_d,
-        null_ls.builtins.formatting.prettierd.with({
-          filetypes = {
-            'graphql',
-            'html',
-            'json',
-            'yaml',
-            'markdown',
-            'vue',
-            'typescript',
-            'typescriptreact',
-            'tsx',
-            'javascript',
-            'javascriptreact',
-            'svelte'
-          }
-        })
-      }
-    })
+    require("typescript-tools").setup({})
   end
 }
