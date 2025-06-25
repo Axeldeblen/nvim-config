@@ -1,6 +1,6 @@
 vim.g.mapleader = ' '
 
-vim.opt.background = ''
+vim.opt.background = 'dark'
 vim.opt.backspace = 'indent,eol,start'
 vim.opt.expandtab = true
 vim.opt.foldlevel = 1
