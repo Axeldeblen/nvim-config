@@ -59,3 +59,6 @@ keymap("n", "<leader>a", "<cmd>lua vim.lsp.buf.code_action()<CR>", default_opts)
 
 -- Copy current relative filepath to clipboard
 keymap('n', '<leader>Y', function() vim.fn.setreg('+', vim.fn.expand('%')) end, default_opts)
+
+-- Caps lock as escape
+keymap('i', '<CapsLock>', '<Esc>', default_opts)
