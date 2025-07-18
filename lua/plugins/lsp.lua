@@ -41,9 +41,11 @@ return {
         keymap('n', ')', function() vim.diagnostic.goto_next() end, opts)
 
         keymap('n', 'K', function() vim.lsp.buf.hover() end, opts)
+        keymap('n', '<leader>k', function() vim.lsp.buf.hover() end, opts)
         keymap('i', '<C-d>', function() vim.lsp.buf.signature_help() end, opts)
-        keymap('n', '<leader>gd', function() vim.lsp.buf.definition() end, opts)
-        keymap('n', '<leader>gr', function() vim.lsp.buf.references() end, opts)
+        keymap('n', '<leader>gd', '<cmd>Telescope lsp_definitions<cr>', opts)
+        keymap('n', '<leader>gr', '<cmd>Telescope lsp_references<cr>', opts)
+        keymap('n', '<leader>gi', '<cmd>Telescope lsp_implementations<cr>', opts)
         keymap('n', '<Leader>d', function() vim.diagnostic.open_float() end, opts)
 
         keymap('n', '<leader>gv', function()

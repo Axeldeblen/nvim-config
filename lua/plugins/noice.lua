@@ -2,14 +2,67 @@ return {
   "folke/noice.nvim",
   event = "VeryLazy",
   opts = {
-    -- add any options here
+    -- LSP hover configuration
+    lsp = {
+      hover = {
+        enabled = true,
+        silent = false,
+        view = nil,
+        opts = {},
+      },
+    },
+    -- Presets configuration
+    presets = {
+      bottom_search = true,         -- use a classic bottom cmdline for search
+      command_palette = true,       -- position the cmdline and popupmenu together
+      long_message_to_split = true, -- long messages will be sent to a split
+      lsp_doc_border = true,        -- add a border to hover docs and signature help
+    },
+    -- Views configuration
+    views = {
+      hover = {
+        border = {
+          style = "rounded",
+          padding = { 0, 1 },
+        },
+        position = { row = 2, col = 2 },
+        win_options = {
+          winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+        },
+      },
+    },
+    -- Notify configuration to prevent the error
+    notify = {
+      enabled = true,
+      view = "notify",
+    },
+    -- Routes to handle potential issues
+    routes = {
+      {
+        filter = {
+          event = "notify",
+          find = "No information available",
+        },
+        opts = { skip = true },
+      },
+    },
   },
   dependencies = {
-    -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
     "MunifTanjim/nui.nvim",
-    -- OPTIONAL:
-    --   `nvim-notify` is only needed, if you want to use the notification view.
-    --   If not available, we use `mini` as the fallback
-    "rcarriga/nvim-notify",
-  }
+    {
+      "rcarriga/nvim-notify",
+      config = function()
+        require("notify").setup({
+          background_colour = "#000000",
+          fps = 30,
+          level = 2,
+          minimum_width = 50,
+          render = "default",
+          stages = "fade_in_slide_out",
+          timeout = 3000,
+          top_down = true,
+        })
+      end,
+    },
+  },
 }
