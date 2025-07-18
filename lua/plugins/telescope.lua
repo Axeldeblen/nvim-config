@@ -28,6 +28,21 @@ return {
     require("telescope").load_extension("undo")
     vim.keymap.set("n", "<leader>u", "<cmd>Telescope undo<cr>")
 
+    vim.keymap.set("n", "<leader>fd", function()
+      local dir
+      if vim.bo.filetype == "oil" then
+        dir = require("oil").get_current_dir()
+      else
+        dir = vim.fn.expand("%:p:h")
+      end
+
+      if dir then
+        require("telescope.builtin").live_grep({
+          search_dirs = { dir }
+        })
+      end
+    end, { desc = "Search in current directory" })
+
     vim.keymap.set('n', '<C-p>', builtin.git_files, opts)
     vim.keymap.set('n', '<leader><S-p>', builtin.find_files, opts)
     vim.keymap.set('n', '<C-f>', builtin.live_grep, opts)
