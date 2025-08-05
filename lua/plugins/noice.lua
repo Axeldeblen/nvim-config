@@ -7,8 +7,13 @@ return {
       hover = {
         enabled = true,
         silent = false,
-        view = nil,
-        opts = {},
+      },
+      signature = {
+        enabled = true,
+      },
+      message = {
+        enabled = true,
+        view = "notify",
       },
     },
     -- Presets configuration
@@ -45,6 +50,35 @@ return {
         },
         opts = { skip = true },
       },
+      {
+        filter = {
+          event = "notify",
+          find = "No code actions available",
+        },
+        opts = { skip = true },
+      },
+      {
+        filter = {
+          event = "msg_show",
+          any = {
+            { find = "search hit BOTTOM" },
+            { find = "search hit TOP" },
+            { find = "Pattern not found" },
+          },
+        },
+        opts = { skip = true },
+      },
+      {
+        filter = {
+          event = "lsp",
+          kind = "progress",
+          cond = function(message)
+            local client = vim.tbl_get(message.opts, "progress", "client")
+            return client == "null-ls"
+          end,
+        },
+        opts = { skip = true },
+      },
     },
   },
   dependencies = {
@@ -61,7 +95,26 @@ return {
           stages = "fade_in_slide_out",
           timeout = 3000,
           top_down = true,
+          max_height = function()
+            return math.floor(vim.o.lines * 0.75)
+          end,
+          max_width = function()
+            return math.floor(vim.o.columns * 0.75)
+          end,
+          on_open = function(win)
+            vim.api.nvim_win_set_config(win, { zindex = 100 })
+          end,
         })
+        
+        -- Override vim.notify to handle string opts properly
+        local original_notify = require("notify")
+        vim.notify = function(message, level, opts)
+          -- If opts is a string, convert it to a table
+          if type(opts) == "string" then
+            opts = { title = opts }
+          end
+          return original_notify(message, level, opts or {})
+        end
       end,
     },
   },

@@ -12,6 +12,7 @@ return {
         'svelte',
         'rust_analyzer',
         'lua_ls',
+        'ts_ls',
       },
       handlers = {
         function(server_name)
@@ -27,11 +28,70 @@ return {
               }
             }
           }
+        end,
+        ["ts_ls"] = function()
+          require("lspconfig").ts_ls.setup {
+            init_options = {
+              maxTsServerMemory = 8192,
+              preferences = {
+                includeCompletionsForModuleExports = true,
+                includeCompletionsWithInsertText = true,
+              },
+            },
+            settings = {
+              typescript = {
+                inlayHints = {
+                  includeInlayParameterNameHints = 'literal',
+                  includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                  includeInlayFunctionParameterTypeHints = true,
+                  includeInlayVariableTypeHints = false,
+                  includeInlayPropertyDeclarationTypeHints = true,
+                  includeInlayFunctionLikeReturnTypeHints = true,
+                  includeInlayEnumMemberValueHints = true,
+                },
+                suggest = {
+                  includeCompletionsForModuleExports = true,
+                },
+                preferences = {
+                  includePackageJsonAutoImports = "off",
+                },
+              },
+              javascript = {
+                inlayHints = {
+                  includeInlayParameterNameHints = 'all',
+                  includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                  includeInlayFunctionParameterTypeHints = true,
+                  includeInlayVariableTypeHints = true,
+                  includeInlayPropertyDeclarationTypeHints = true,
+                  includeInlayFunctionLikeReturnTypeHints = true,
+                  includeInlayEnumMemberValueHints = true,
+                },
+                suggest = {
+                  includeCompletionsForModuleExports = true,
+                },
+              },
+            },
+            flags = {
+              debounce_text_changes = 150,
+            },
+            on_attach = function(client, bufnr)
+              client.server_capabilities.semanticTokensProvider = nil
+            end,
+          }
         end
       }
     })
 
     local keymap = vim.keymap.set
+    
+    vim.diagnostic.config({
+      virtual_text = false,
+      signs = true,
+      underline = true,
+      update_in_insert = false,
+      severity_sort = true,
+    })
+    
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('UserLspConfig', {}),
       callback = function(ev)
@@ -63,6 +123,7 @@ return {
             virtual_text = false,
             underline = true,
             signs = true,
+            update_in_insert = false,
           }
         )
       end,
