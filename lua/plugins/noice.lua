@@ -1,121 +1,133 @@
-return {
-  "folke/noice.nvim",
-  event = "VeryLazy",
-  opts = {
-    -- LSP hover configuration
-    lsp = {
-      hover = {
-        enabled = true,
-        silent = false,
-      },
-      signature = {
-        enabled = true,
-      },
-      message = {
-        enabled = true,
-        view = "notify",
-      },
-    },
-    -- Presets configuration
-    presets = {
-      bottom_search = true,         -- use a classic bottom cmdline for search
-      command_palette = true,       -- position the cmdline and popupmenu together
-      long_message_to_split = true, -- long messages will be sent to a split
-      lsp_doc_border = true,        -- add a border to hover docs and signature help
-    },
-    -- Views configuration
-    views = {
-      hover = {
-        border = {
-          style = "rounded",
-          padding = { 0, 1 },
-        },
-        position = { row = 2, col = 2 },
-        win_options = {
-          winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
-        },
-      },
-    },
-    -- Notify configuration to prevent the error
-    notify = {
-      enabled = true,
-      view = "notify",
-    },
-    -- Routes to handle potential issues
-    routes = {
-      {
-        filter = {
-          event = "notify",
-          find = "No information available",
-        },
-        opts = { skip = true },
-      },
-      {
-        filter = {
-          event = "notify",
-          find = "No code actions available",
-        },
-        opts = { skip = true },
-      },
-      {
-        filter = {
-          event = "msg_show",
-          any = {
-            { find = "search hit BOTTOM" },
-            { find = "search hit TOP" },
-            { find = "Pattern not found" },
-          },
-        },
-        opts = { skip = true },
-      },
-      {
-        filter = {
-          event = "lsp",
-          kind = "progress",
-          cond = function(message)
-            local client = vim.tbl_get(message.opts, "progress", "client")
-            return client == "null-ls"
-          end,
-        },
-        opts = { skip = true },
-      },
-    },
-  },
-  dependencies = {
-    "MunifTanjim/nui.nvim",
-    {
-      "rcarriga/nvim-notify",
-      config = function()
-        require("notify").setup({
-          background_colour = "#000000",
-          fps = 30,
-          level = 2,
-          minimum_width = 50,
-          render = "default",
-          stages = "fade_in_slide_out",
-          timeout = 3000,
-          top_down = true,
-          max_height = function()
-            return math.floor(vim.o.lines * 0.75)
-          end,
-          max_width = function()
-            return math.floor(vim.o.columns * 0.75)
-          end,
-          on_open = function(win)
-            vim.api.nvim_win_set_config(win, { zindex = 100 })
-          end,
-        })
-        
-        -- Override vim.notify to handle string opts properly
-        local original_notify = require("notify")
-        vim.notify = function(message, level, opts)
-          -- If opts is a string, convert it to a table
-          if type(opts) == "string" then
-            opts = { title = opts }
-          end
-          return original_notify(message, level, opts or {})
-        end
-      end,
-    },
-  },
-}
+--return {
+--"folke/noice.nvim",
+--event = "VeryLazy",
+--opts = {
+---- LSP hover configuration
+--lsp = {
+--hover = {
+--enabled = true,
+--silent = false,
+--},
+--signature = {
+--enabled = true,
+--},
+--message = {
+--enabled = true,
+--view = "notify",
+--},
+--},
+---- Presets configuration
+--presets = {
+--bottom_search = true,         -- use a classic bottom cmdline for search
+--command_palette = true,       -- position the cmdline and popupmenu together
+--long_message_to_split = true, -- long messages will be sent to a split
+--lsp_doc_border = true,        -- add a border to hover docs and signature help
+--},
+---- Views configuration
+--views = {
+--hover = {
+--border = {
+--style = "rounded",
+--padding = { 0, 1 },
+--},
+--position = { row = 2, col = 2 },
+--win_options = {
+--winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+--},
+--},
+--},
+---- Notify configuration to prevent the error
+--notify = {
+--enabled = true,
+--view = "notify",
+--},
+---- Routes to handle potential issues
+--routes = {
+--{
+--filter = {
+--event = "notify",
+--find = "No information available",
+--},
+--opts = { skip = true },
+--},
+--{
+--filter = {
+--event = "notify",
+--find = "No code actions available",
+--},
+--opts = { skip = true },
+--},
+--{
+--filter = {
+--event = "msg_show",
+--any = {
+--{ find = "search hit BOTTOM" },
+--{ find = "search hit TOP" },
+--{ find = "Pattern not found" },
+--},
+--},
+--opts = { skip = true },
+--},
+--{
+--filter = {
+--event = "lsp",
+--kind = "progress",
+--cond = function(message)
+--local client = vim.tbl_get(message.opts, "progress", "client")
+--return client == "null-ls"
+--end,
+--},
+--opts = { skip = true },
+--},
+--},
+--},
+--dependencies = {
+--"MunifTanjim/nui.nvim",
+--{
+--"rcarriga/nvim-notify",
+--config = function()
+--require("notify").setup({
+--background_colour = "#000000",
+--fps = 30,
+--level = 2,
+--minimum_width = 50,
+--render = "default",
+--stages = "fade_in_slide_out",
+--timeout = 3000,
+--top_down = true,
+--max_height = function()
+--return math.floor(vim.o.lines * 0.75)
+--end,
+--max_width = function()
+--return math.floor(vim.o.columns * 0.75)
+--end,
+--on_open = function(win)
+--vim.api.nvim_win_set_config(win, { zindex = 100 })
+--end,
+--})
+
+---- Override vim.notify to handle string opts properly
+--local notify = require("notify")
+--vim.notify = function(message, level, opts)
+---- Ensure opts is always a table
+--if opts == nil then
+--opts = {}
+--elseif type(opts) == "string" then
+--opts = { title = opts }
+--elseif type(opts) ~= "table" then
+--opts = {}
+--end
+
+---- Ensure level is valid
+--if type(level) == "string" then
+--level = vim.log.levels[level:upper()] or vim.log.levels.INFO
+--elseif type(level) ~= "number" then
+--level = vim.log.levels.INFO
+--end
+
+--return notify(message, level, opts)
+--end
+--end,
+--},
+--},
+--}
